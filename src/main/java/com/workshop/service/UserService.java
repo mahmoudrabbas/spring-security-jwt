@@ -1,7 +1,7 @@
 package com.workshop.service;
 
 import com.workshop.entity.User;
-import com.workshop.repository.UserRepo;
+import com.workshop.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 public class UserService {
     @Autowired
-    private UserRepo userRepository;
+    private UserRepository userRepository;
 
     public User createUser(User user) {
         return userRepository.save(user);
