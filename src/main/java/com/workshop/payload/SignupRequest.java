@@ -1,6 +1,5 @@
 package com.workshop.payload;
 
-import com.workshop.entity.Role;
 import lombok.Data;
 
 import java.util.Set;
@@ -12,5 +11,5 @@ public class SignupRequest {
     private String username;
     private String email;
     private String password;
-    private Set<Role> roles;
+    private Set<String> roles;
 }
