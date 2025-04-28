@@ -1,5 +1,6 @@
 package com.workshop.security.jwt;
 
+import com.workshop.security.service.UserDetailsImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -24,12 +25,12 @@ public class JwtService {
 
     // Generate Token
     public String generateToken(Authentication authentication){
-        UserDetails userPrincipal = (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
+        UserDetails userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis()+EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.ES256, SECRET_KEY)
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
 
