@@ -1,5 +1,7 @@
 package com.workshop.security.config;
 
+import com.fasterxml.jackson.databind.Module;
+import com.workshop.module.SanitizingModule;
 import com.workshop.security.jwt.JwtAuthEntryPoint;
 import com.workshop.security.jwt.JwtAuthTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,12 @@ public class SecurityConfig {
                         .allowedHeaders("*");
             }
         };
+    }
+
+
+    @Bean
+    public Module sanitizingModule(){
+        return new SanitizingModule();
     }
 
     @Bean
