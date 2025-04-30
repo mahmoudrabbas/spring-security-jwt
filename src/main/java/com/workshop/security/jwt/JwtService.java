@@ -49,7 +49,11 @@ public class JwtService {
 
     // extract username
     public String extractUsername(String token){
-        return extractClaim(token, Claims::getSubject);
+        try {
+            return extractClaim(token, Claims::getSubject);
+        } catch (Exception e) {
+            throw new RuntimeException("Token is invalid");
+        }
     }
 
     // extract expiration time
@@ -61,7 +65,7 @@ public class JwtService {
         return extractExpirationDate(token).before(new Date());
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails){
+    public boolean isTokenValid(String token, UserDetails userDetails) throws RuntimeException{
         return !isTokenExpired(token)&& extractUsername(token).equals(userDetails.getUsername());
     }
 

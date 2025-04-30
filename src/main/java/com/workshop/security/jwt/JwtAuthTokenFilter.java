@@ -34,20 +34,24 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
         if(authHeader!=null && authHeader.startsWith("Bearer ")){
             String token = authHeader.substring(7);
-            String username = jwtService.extractUsername(token);
-            if(username!=null && SecurityContextHolder.getContext().getAuthentication()==null){
-                logger.info("Username extracted: {}", username);
-                UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsService.loadUserByUsername(username);
-                if(jwtService.isTokenValid(token, userDetails)){
-                    logger.info("Token is valid for user: {}", username);
+            try {
+                String username = jwtService.extractUsername(token);
+                if(username!=null && SecurityContextHolder.getContext().getAuthentication()==null){
+                    logger.info("Username extracted: {}", username);
+                    UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsService.loadUserByUsername(username);
+                    if(jwtService.isTokenValid(token, userDetails)){
+                        logger.info("Token is valid for user: {}", username);
 
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            userDetails, null, userDetails.getAuthorities()
-                    );
-                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
-                    logger.info("authentication: {}", SecurityContextHolder.getContext().getAuthentication());
+                        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                                userDetails, null, userDetails.getAuthorities()
+                        );
+                        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        SecurityContextHolder.getContext().setAuthentication(authToken);
+                        logger.info("authentication: {}", SecurityContextHolder.getContext().getAuthentication());
+                    }
                 }
+            }catch (Exception e){
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             }
         }
 

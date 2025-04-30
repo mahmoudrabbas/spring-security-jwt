@@ -85,7 +85,6 @@ public class AuthController {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
-
         return ResponseEntity.ok(new JwtResponse(token, "Bearer", userDetails.getName(), userDetails.getUsername(), userDetails.getEmail(), roles));
 
 
